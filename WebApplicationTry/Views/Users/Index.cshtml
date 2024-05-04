@@ -1,0 +1,61 @@
+﻿@model IEnumerable<WebApplicationTry.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "User Registry";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="UserAction" method="post">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll" /></th>
+                    <th>Name</th>
+                    <th>e-Mail</th>
+                    <th>Last login (UTC +0)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td><input type="checkbox" name="selectedUsers[]" value="@user.Id" /></td>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td>@(user.LastLoginDate.HasValue ? user.LastLoginDate.Value.ToString("yyyy-MM-dd HH:mm:ss") : "Unknown")</td>
+                        <td>@(user.IsBlocked ? "Blocked" : "Active")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="btn-group" role="group" aria-label="User actions">
+        <button type="submit" name="action" value="Block" class="btn btn-warning">
+            <i class="fas fa-ban"></i> Block
+        </button>
+        <button type="submit" name="action" value="Unblock" class="btn btn-success">
+            <i class="fas fa-unlock"></i> Unblock
+        </button>
+        <button type="submit" name="action" value="Delete" class="btn btn-danger">
+            <i class="fas fa-trash-alt"></i> Delete
+        </button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById('selectAll').onclick = function () {
+            var checkboxes = document.querySelectorAll('input[name="selectedUsers[]"]');
+            for (var checkbox of checkboxes) {
+                checkbox.checked = this.checked;
+            }
+        };
+    </script>
+}
+
+
+
+
